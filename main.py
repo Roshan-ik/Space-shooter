@@ -11,11 +11,12 @@ clock = pygame.time.Clock()
 score = 0
 
 meteor_surf = pygame.image.load(os.path.join('images','meteor.png')).convert_alpha()
-explosion_frames = [pygame.image.load(os.path.join('images','framese',f'{i}.png')).convert_alpha()for i in range(11)]
+explosion_frames = [pygame.image.load(os.path.join('images','frames',f'{i}.png')).convert_alpha()for i in range(11)]
 #sound
 laser_sound = pygame.mixer.Sound(os.path.join('sound','laser.wav'))
 laser_sound.set_volume(0.5)
 explosion_sound = pygame.mixer.Sound(os.path.join('sound','explosion.wav'))
+explosion_sound.set_volume(0.5)
 damage_sound = pygame.mixer.Sound(os.path.join('sound','damage.ogg'))
 game_sound = pygame.mixer.Sound(os.path.join('sound','game_music.wav'))
 game_sound.play()
@@ -120,17 +121,23 @@ def collision():
     global running,score
     break1 = pygame.sprite.spritecollide(player, meteor_sprite, True)
     if break1:
+        end_page()
         running = False
-        damage_sound.play()
     for laser in laser_sprite:
         collide = pygame.sprite.spritecollide(laser, meteor_sprite, True)
         if collide:
             score += len(collide)
             laser.kill()
             Animation(laser.rect.midtop,all_sprites)
-def start_page():
+def end_page():
     display.fill('black')
-    pass
+    end = pygame.font.Font(None,45)
+    end_surf = end.render("GAME OVER",True,'white')
+    end_rect = end_surf.get_rect(midbottom = (width/2,height/2))
+
+
+    display.blit(end_surf,end_rect)
+
 
 def display_score():
     current_time = pygame.time.get_ticks()//1000
@@ -160,7 +167,7 @@ meteor_event = pygame.event.custom_type()
 pygame.time.set_timer(meteor_event,1000)
 #loop
 while running:
-    dt=clock.tick(30)/1000
+    dt=clock.tick(60)/1000
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
