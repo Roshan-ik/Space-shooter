@@ -1,5 +1,6 @@
 
 import os
+import time
 from random import randint
 import pygame
 
@@ -23,7 +24,27 @@ game_sound.play()
 
 
 
+
 #load
+def starting_page():
+    waiting = True
+    while waiting:
+        display.fill('black')
+        starting_line = pygame.font.Font(None, 45)
+        starting_surf = starting_line.render("""WELCOME TO MY SPACE SHOOTER GAME""", True, 'white')
+        starting_rect = starting_surf.get_rect(midbottom=(width / 2, height / 2))
+        display.blit(starting_surf, starting_rect)
+
+        start_line = pygame.font.Font(None, 45)
+        start_surf = start_line.render("PRESS ANY KEY TO CONTINUE", True, 'white')
+        start_rect = start_surf.get_rect(midbottom=(width / 2,440))
+        display.blit(start_surf, start_rect)
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                waiting = False
+starting_page()
+
 class Player(pygame.sprite.Sprite):
     def __init__(self,groups):
         super().__init__(groups)
@@ -131,12 +152,12 @@ def collision():
             Animation(laser.rect.midtop,all_sprites)
 def end_page():
     display.fill('black')
-    end = pygame.font.Font(None,45)
-    end_surf = end.render("GAME OVER",True,'white')
-    end_rect = end_surf.get_rect(midbottom = (width/2,height/2))
-
-
-    display.blit(end_surf,end_rect)
+    end = pygame.font.Font(None, 45)
+    end_surf = end.render("GAME OVER", True, 'white')
+    end_rect = end_surf.get_rect(midbottom=(width / 2, height / 2))
+    display.blit(end_surf, end_rect)
+    pygame.display.update()
+    time.sleep(3)
 
 
 def display_score():
